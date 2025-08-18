@@ -47,6 +47,16 @@ public:
 		}
 	}
 
+	int getNoOfRows() const
+	{
+		return noOfRows;
+	}
+
+	int getNoOfCols() const
+	{
+		return noOfCols;
+	}
+
 	void emptyMaze()
 	{
 		for (int i = 0; i < noOfRows; i++)
@@ -432,7 +442,83 @@ public:
 		return c;
 	}
 
-	void rma(int sX, int sY, int fX, int fY, char* filename)
+	int copyFile(char* destinationFile, char* sourceFile)
+	{
+		int status = 0;
+		ifstream source(sourceFile);
+		if (source.is_open())
+		{
+			string str, line;
+			while (std::getline(source, line))
+			{
+				str += line;
+				str += "\n";
+			}
+			str += "\n";
+			source.close();
+
+			ofstream destination(destinationFile);
+			if (destination.is_open())
+			{
+				destination << str;
+				destination.close();
+			}
+			else
+			{
+				cout << "Error opening destination file in copyFile(char*, char*)\n";
+				status = 2;
+			}
+		}
+		else
+		{
+			cout << "Error opening source file in copyFile(char*, char*)\n";
+			status = 1;
+		}
+
+		return status;
+	}
+
+	int addBeginDocument(char* filename, int multiColsNumber)
+	{
+		int status = 0;
+		string str = "\\begin{document}\n\\begin{multicols}{";
+		str += char(48 + multiColsNumber);	//ASCII-48 = 0
+		str+= "}\n\n";
+
+		ofstream myFile(filename, std::ios::app);
+		if (myFile.is_open())
+		{
+			myFile << str;
+			myFile.close();
+		}
+		else
+		{
+			cout << "Error opening the file: " << filename << "\n";
+			status = 1;
+		}
+		return status;
+	}
+
+	int addEndDocument(char* filename)
+	{
+		int status = 0;
+		string str = "\n\\end{multicols}\n\\end{document}";
+
+		ofstream myFile(filename, std::ios::app);
+		if (myFile.is_open())
+		{
+			myFile << str;
+			myFile.close();
+		}
+		else
+		{
+			cout << "Error opening the file: " << filename << "\n";
+			status = 1;
+		}
+		return status;
+	}
+
+	void rma(int sX, int sY, int fX, int fY, char* LaTeX_file, char* preambleFile)
 	{
 		int x = sX, y = sY;
 		int direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
@@ -440,7 +526,9 @@ public:
 		cout << "S: " << x << ", " << y << ": " << maze[x][y] << "\n";
 		Point next;
 
-		generateLaTeX(filename, x, y, 'S');
+		copyFile(LaTeX_file, preambleFile);
+		addBeginDocument(LaTeX_file, 4);
+		generateLaTeX(LaTeX_file, x, y, 'S');
 
 		while (!(x == fX && y == fY))
 		{
@@ -466,7 +554,7 @@ public:
 				c = 'D';
 			}
 			
-			generateLaTeX(filename, x, y, getCharDirection(direction));
+			generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
 			
 			if (!isObstacle(next.x, next.y))
 			{
@@ -485,7 +573,9 @@ public:
 				direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
 			}
 		}
-		
+
+		generateLaTeX(LaTeX_file, x, y, 'F');
+		addEndDocument(LaTeX_file);
 		cout << "F: " << x << ", " << y << ": " << maze[x][y] << "\n";
 	}
 
@@ -505,6 +595,7 @@ public:
 			for (int i = 0; i < noOfRows; i++)
 			{
 				str += "c ";
+//				str += "p{1em} ";
 			}
 			str += "|}\n\t\\hline\n";
 			
@@ -515,7 +606,7 @@ public:
 				{
 					if (i == x && j == y)
 					{
-						str += "\\cellcolor[rgb]{0, 1, 1}{";
+						str += "\\cellcolor[rgb]{0, 1, 1}{\\tiny ";
 						str += c;
 						str += "}";	//(0, 255, 255)
 //						str += "\\cellcolor[rgb]{0, 1, 1}";	//(0, 255, 255)
@@ -549,6 +640,34 @@ public:
 		return status;
 	}
 
+	int printArray(char* filename)
+	{
+		int status = 0;
+		string str;
+		for (int i = 0 ; i < noOfRows; i++)
+		{
+			for (int j = 0; j < noOfCols; j++)
+			{
+				str += char(48 + maze[i][j]);	//ASCII-48 = 0
+				str += " ";
+			}
+			str += "\n";
+		}
+		ofstream myFile(filename);
+		if (myFile.is_open())
+		{
+			myFile << str;
+			myFile.close();
+		}
+		else
+		{
+			status = 1;
+			cout << "Error opening file: " << filename << "\n";
+		}
+		
+		return status;
+	}
+
 	~Maze()
 	{
 		for (int i = 0; i < noOfRows; i++)
@@ -564,21 +683,22 @@ public:
 
 int main(void)
 {
-//	srand(time(0));
+	srand(time(0));
 	char filename[] = "table.txt";
-	char filenameAppended[] = "appended.txt";
+	char preambleLaTeX[] = "preamble.txt";
+	char mazeLaTeX[] = "maze.tex";
+	char bitmapArrayFile[] = "bitmap.txt";
 	int noOfRows = 3, noOfCols = 3;
 	Maze a(noOfRows, noOfCols);
-//	a.print();
 	a.generate();
 	a.print();
-	a.generateLaTeX(filename);
-//	a.rma(6, 0, 0, 6);
-//	a.rma(noOfRows - 1, 0, 0, noOfCols - 1);
-	a.rma(noOfRows - 1, 0, 0, noOfCols - 1, filenameAppended);
+	a.rma(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
+	a.printArray(bitmapArrayFile);	
 	
 	//pdflatex --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, "d:/STM/GU Tech/Misc LaTeX/misc.tex"
 	//pdflatex -output-directory=d:/STM/"GU Tech"/"Misc LaTeX"/ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, d:/STM/"GU Tech"/"Misc LaTeX"/misc.tex
+	
+	//pdflatex -output-directory=c:\Users\"Syed Taloot"\Desktop\"STM GU Tech Laptop"\"PSPF Lab Spring 2025"\"PSPF Projects"\Maze\MazeLaTeX\ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, c:\Users\"Syed Taloot"\Desktop\"STM GU Tech Laptop"\"PSPF Lab Spring 2025"\"PSPF Projects"\Maze\"Maze Code"\maze.tex
 	
 	return 0;
 }
