@@ -1,1 +1,408 @@
+\documentclass[12pt]{exam}
+\usepackage{graphicx}			    % Use this package to include images %Path relative to the main .tex file 
+\graphicspath{ {./Images/} }
+\usepackage{amsmath}			    % A library of many standard math expressions
+\usepackage{mathtools}              % For Aboxed{} (https://tex.stackexchange.com/questions/346577/boxed-and-align)
+% \usepackage[top=2cm, bottom=2cm, right=2cm, left=2cm]{geometry}
+% \usepackage[top=2cm, bottom=2cm, right=2cm, left=2cm]{geometry}
+\usepackage{adjustbox}
+% \usepackage{fancyhdr}			    % Creates headers and footers
+\usepackage{enumerate}              % These two packages give custom labels to a list
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}               % https://www.overleaf.com/learn/latex/Hyperlinks
+\usepackage{xcolor}
+\usepackage[svgnames, table, dvipsnames]{xcolor}
+\usepackage{float}
+\usepackage{cmupint}                % For upright integrals. https://tex.stackexchange.com/questions/503527/how-to-write-upright-integrals-with-automatic-sizing
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{titling}
+\usepackage{minted}                 % For code blocks
+\usemintedstyle{monokai}            % For code blocks
+\definecolor{bg}{HTML}{282828}      % For code blocks, from https://github.com/kevinsawicki/monokai
+\usepackage{nameref}
+% \usepackage{mathtools, tccomicsans}
+% \usepackage{comicsans}
+% \usepackage[main,largesymbols]{tccomicsans} % https://www.reddit.com/r/LaTeX/comments/1l5no5d/comment/mwm64ze/
+\renewcommand*\contentsname{Summary}
+% \renewcommand{\contentsname}{\centering \normalfont\normalsize Contents}
+\renewcommand{\contentsname}{\centering \bfseries\Large Contents}
+% \renewcommand{\cftaftertoctitle}{\hfill}
+\usepackage{multicol}
 
+% \extraheadheight[1.5cm]{-2em}
+% \firstpageheader{\includegraphics[scale=0.3]{Al Ghazali University 256x256.png}}
+% {\includegraphics[scale=0.15]{Bismillah.png} \\ \Huge GU Tech - Al Ghazali University \\ \normalsize Department of Computer Science}
+% {\includegraphics[scale=0.3]{GU Tech 256x256.png}}
+
+% \firstpageheadrule
+\footer{}{Page \thepage\ of \numpages}{}
+
+\hypersetup
+{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    %pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
+\begin{document}
+\begin{multicols}{4}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny S} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny U} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny U} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny L} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny D} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny D} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny L} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny D} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny L} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny L} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny D} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\cellcolor[rgb]{0, 1, 1}{\tiny R} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor[rgb]{0, 1, 1}{\tiny R} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \cellcolor[rgb]{0, 1, 1}{\tiny R} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor[rgb]{0, 1, 1}{\tiny R} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \cellcolor[rgb]{0, 1, 1}{\tiny U} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \cellcolor[rgb]{0, 1, 1}{\tiny U} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \cellcolor[rgb]{0, 1, 1}{\tiny U} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \cellcolor[rgb]{0, 1, 1}{\tiny U} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\begin{table}[H]
+\makebox[\linewidth][c]
+{
+	\begin{tabular}{| c c c c c |}
+	\hline
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \cellcolor[rgb]{0, 1, 1}{\tiny F} \\
+	\cellcolor{black} & \cellcolor{black} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \cellcolor{black} & \cellcolor{black} & \cellcolor{black} & \texttt{} \\
+	\texttt{} & \texttt{} & \texttt{} & \texttt{} & \texttt{} \\
+	\hline
+	\end{tabular}
+}
+% \caption{}
+% \label{}
+\end{table}
+
+\end{multicols}
+
+\begin{center}
+	0 0 0 1 0 
+
+	1 1 0 1 0 
+
+	0 0 0 1 0 
+
+	0 1 1 1 0 
+
+	0 0 0 0 0 
+\end{center}
+
+\end{document}
