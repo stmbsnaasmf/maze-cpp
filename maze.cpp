@@ -111,6 +111,9 @@ public:
 
 	int getNoOfNeighbours(int r, int c)
 	{
+		//In this context, neighnours are NOT immediately neighbouring indexes, but indexes that are (+-2, +-2).
+		//That is because this function is used for maze generation ONLY, and at that point, immediately neighbouring indexes are treated as WALLS or removed walls.
+		
 		//Corner = 2, Edge = 3, Middle = 4
 		if (isCorner(r, c))
 		{
@@ -126,6 +129,9 @@ public:
 
 	void getNeighbours(int r, int c, Point* neighbours)
 	{
+		//In this context, neighnours are NOT immediately neighbouring indexes, but indexes that are (+-2, +-2).
+		//That is because this function is used for maze generation ONLY, and at that point, immediately neighbouring indexes are treated as WALLS or removed walls.
+		
 		//This function assumes that the array of neighbours is already appropriately sized.
 		if (r == 0 && c == 0) //Top left corner
 		{
@@ -192,6 +198,8 @@ public:
 
 	void removeWall(int r0, int c0, int r1, int c1)
 	{
+		//Given two cells separated by a wall, it turns the wall into an empty cell.
+		
 		if (r0 == r1)	//Same row
 		{
 			maze[r0][min(c0, c1) + 1] = 0;	//0 = empty cell, 1 = obstacle or wall
@@ -353,70 +361,53 @@ public:
 		}
 	}
 	
-	bool isJunction(int x, int y, const int direction)
-	{
-		//0 = up, 1 = right, 2 = left, 3 = down
-		if (1 == direction || 2 == direction)	//If moving horizontally, check only vertical neighbours.
-		{
-			return !(isObstacle(x - 1, y) && isObstacle(x + 1, y));	//If either neighbour is empty, we are at a junction.
-		}
-		else	//If moving vertically, check only horizontal neighbours.
-		{
-			return !(isObstacle(x, y - 1) && isObstacle(x, y + 1));	//If either neighbour is empty, we are at a junction.
-		}
-	}
+	// bool isJunction(int x, int y, const int direction)
+	// {
+	// 	//0 = up, 1 = right, 2 = left, 3 = down
+	// 	if (1 == direction || 2 == direction)	//If moving horizontally, check only vertical neighbours.
+	// 	{
+	// 		return !(isObstacle(x - 1, y) && isObstacle(x + 1, y));	//If either neighbour is empty, we are at a junction.
+	// 	}
+	// 	else	//If moving vertically, check only horizontal neighbours.
+	// 	{
+	// 		return !(isObstacle(x, y - 1) && isObstacle(x, y + 1));	//If either neighbour is empty, we are at a junction.
+	// 	}
+	// }
 
-	void rma(int sX, int sY, int fX, int fY)
+	bool isJunction(const int x, const int y)
 	{
-		int x = sX, y = sY;
-		int direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
-
-		cout << "S: " << x << ", " << y << ": " << maze[x][y] << "\n";
-		Point next;
-	
-		while (!(x == fX && y == fY))
+		//A junction is a cell that has at least 3 empty neighbour cells.
+		int noOfEmptyNeighbours = 0;
+		
+		if (!isObstacle(x - 1, y))
 		{
-			char c;
-			if (0 == direction)	//Up
-			{
-				next.x = x - 1, next.y = y;	// x = x - 1 because origin is at top left.
-				c = 'U';
-			}
-			if (1 == direction)	//Right
-			{
-				next.x = x, next.y = y + 1;
-				c = 'R';
-			}
-			if (2 == direction)	//Left
-			{
-				next.x = x, next.y = y - 1;
-				c = 'L';
-			}
-			if (3 == direction)	//Down
-			{
-				next.x = x + 1, next.y = y;
-				c = 'D';
-			}
-			
-			if (!isObstacle(next.x, next.y))
-			{
-				x = next.x; y = next.y;
-				cout << c << ": " << x << ", " << y << ": " << maze[x][y] << "\n";
-				
-				if (isJunction(x, y, direction))
-				{
-//					cout << c << ", at junction\n";
-					direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
-				}
-			}
-			else
-			{
-//				cout << "Encountered obstacle\n";
-				direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
-			}
+			noOfEmptyNeighbours++;
 		}
 		
-		cout << "F: " << x << ", " << y << ": " << maze[x][y] << "\n";
+		if (!isObstacle(x + 1, y))
+		{
+			noOfEmptyNeighbours++;
+		}
+		
+		if (!isObstacle(x, y - 1))
+		{
+			noOfEmptyNeighbours++;
+		}
+		
+		if (!isObstacle(x, y + 1))
+		{
+			noOfEmptyNeighbours++;
+		}
+
+
+		if (noOfEmptyNeighbours >= 3)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	char getCharDirection(int direction)
@@ -478,12 +469,50 @@ public:
 		return status;
 	}
 
-	int addBeginDocument(char* filename, int multiColsNumber)
+	int addBeginMulicol(char* filename, int multiColsNumber)
 	{
 		int status = 0;
-		string str = "\\begin{document}\n\\begin{multicols}{";
+		string str = "\\begin{multicols}{";
 		str += char(48 + multiColsNumber);	//ASCII-48 = 0
 		str+= "}\n\n";
+
+		ofstream myFile(filename, std::ios::app);
+		if (myFile.is_open())
+		{
+			myFile << str;
+			myFile.close();
+		}
+		else
+		{
+			cout << "Error opening the file: " << filename << "\n";
+			status = 1;
+		}
+		return status;
+	}
+
+	int addBeginDocument(char* filename)
+	{
+		int status = 0;
+		string str = "\\begin{document}\n\n";
+
+		ofstream myFile(filename, std::ios::app);
+		if (myFile.is_open())
+		{
+			myFile << str;
+			myFile.close();
+		}
+		else
+		{
+			cout << "Error opening the file: " << filename << "\n";
+			status = 1;
+		}
+		return status;
+	}
+
+	int addEndMulicol(char* filename)
+	{
+		int status = 0;
+		string str = "\n\n\\end{multicols}\n";
 
 		ofstream myFile(filename, std::ios::app);
 		if (myFile.is_open())
@@ -502,7 +531,7 @@ public:
 	int addEndDocument(char* filename)
 	{
 		int status = 0;
-		string str = "\n\\end{multicols}\n\\end{document}";
+		string str = "\n\n\\end{document}";
 
 		ofstream myFile(filename, std::ios::app);
 		if (myFile.is_open())
@@ -518,6 +547,276 @@ public:
 		return status;
 	}
 
+	int getNoOfColsForLaTeX()
+	{
+		// \begin{multicols}{n}
+		int multi_col_number = 4;
+		if (noOfRows > 5 && noOfRows <= 10)
+		{
+			multi_col_number = 3;
+		}
+		else if (noOfRows > 10 && noOfRows <= 12)
+		{
+			multi_col_number = 2;
+		}
+		else if (noOfRows > 12)
+		{
+			multi_col_number = 0;
+		}
+		
+		return multi_col_number;
+	}
+
+	bool isRightCellWall(const int x, const int y, const int direction)
+	{
+		//0 = up, 1 = right, 2 = left, 3 = down
+		int rightX, rightY;
+		if (0 == direction)
+		{
+			rightX = x; rightY = y + 1;
+		}
+		else if (1 == direction)
+		{
+			rightX = x + 1; rightY = y;
+		}
+		else if (2 == direction)
+		{
+			rightX = x - 1; rightY = y;
+		}
+		else if (3 == direction)
+		{
+			rightX = x; rightY = y - 1;
+		}
+		
+		return isObstacle(rightX, rightY);
+	}
+
+	// bool isRightDiagonalCellWall(const int x, const int y, const int direction)
+	// {
+	// 	//0 = up, 1 = right, 2 = left, 3 = down
+	// 	int rightDiagonalX, rightDiagonalY;
+	// 	if (0 == direction)
+	// 	{
+	// 		rightDiagonalX = x - 1; rightDiagonalY = y + 1;
+	// 	}
+	// 	else if (1 == direction)
+	// 	{
+	// 		rightDiagonalX = x + 1; rightDiagonalY = y + 1;
+	// 	}
+	// 	else if (2 == direction)
+	// 	{
+	// 		rightDiagonalX = x - 1; rightDiagonalY = y - 1;
+	// 	}
+	// 	else if (3 == direction)
+	// 	{
+	// 		rightDiagonalX = x + 1; rightDiagonalY = y - 1;
+	// 	}
+		
+	// 	return isObstacle(rightDiagonalX, rightDiagonalY);
+	// }
+
+	bool isFronCelltWall(const int x, const int y, const int direction)
+	{
+		//0 = up, 1 = right, 2 = left, 3 = down
+		int frontX, frontY;
+		if (0 == direction)
+		{
+			frontX = x - 1; frontY = y;
+		}
+		else if (1 == direction)
+		{
+			frontX = x; frontY = y + 1;
+		}
+		else if (2 == direction)
+		{
+			frontX = x; frontY = y - 1;
+		}
+		else if (3 == direction)
+		{
+			frontX = x + 1; frontY = y;
+		}
+		
+		return isObstacle(frontX, frontY);
+	}
+
+	Point getFront(const int x, const int y, const int direction)
+	{
+		//0 = up, 1 = right, 2 = left, 3 = down
+		int frontX, frontY;
+		if (0 == direction)
+		{
+			frontX = x - 1; frontY = y;
+		}
+		else if (1 == direction)
+		{
+			frontX = x; frontY = y + 1;
+		}
+		else if (2 == direction)
+		{
+			frontX = x; frontY = y - 1;
+		}
+		else if (3 == direction)
+		{
+			frontX = x + 1; frontY = y;
+		}
+
+		return Point(frontX, frontY);
+	}
+
+	Point getRight(const int x, const int y, const int direction)
+	{
+		//0 = up, 1 = right, 2 = left, 3 = down
+		int rightX, rightY;
+		if (0 == direction)
+		{
+			rightX = x; rightY = y + 1;
+		}
+		else if (1 == direction)
+		{
+			rightX = x + 1; rightY = y;
+		}
+		else if (2 == direction)
+		{
+			rightX = x - 1; rightY = y;
+		}
+		else if (3 == direction)
+		{
+			rightX = x; rightY = y - 1;
+		}
+
+		return Point(rightX, rightY);
+	}
+
+	// Point getRightDiagonal(const int x, const int y, const int direction)
+	// {
+	// 	//0 = up, 1 = right, 2 = left, 3 = down
+	// 	int rightDiagonalX, rightDiagonalY;
+	// 	if (0 == direction)
+	// 	{
+	// 		rightDiagonalX = x - 1; rightDiagonalY = y + 1;
+	// 	}
+	// 	else if (1 == direction)
+	// 	{
+	// 		rightDiagonalX = x + 1; rightDiagonalY = y + 1;
+	// 	}
+	// 	else if (2 == direction)
+	// 	{
+	// 		rightDiagonalX = x - 1; rightDiagonalY = y - 1;
+	// 	}
+	// 	else if (3 == direction)
+	// 	{
+	// 		rightDiagonalX = x + 1; rightDiagonalY = y - 1;
+	// 	}
+		
+	// 	return Point(rightDiagonalX, rightDiagonalY);
+	// }
+
+	int getNewRightDirection(int previousDirection)
+	{
+		//0 = up, 1 = right, 2 = left, 3 = down
+		int newDirection;
+		if (0 == previousDirection)
+		{
+			newDirection = 1;
+		}
+		else if (1 == previousDirection)
+		{
+			newDirection = 3;
+		}
+		else if (2 == previousDirection)
+		{
+			newDirection = 0;
+		}
+		else if (3 == previousDirection)
+		{
+			newDirection = 2;
+		}
+
+		return newDirection;
+	}
+
+	int getNewLeftDirection(int previousDirection)
+	{
+		//0 = up, 1 = right, 2 = left, 3 = down
+		int newDirection;
+		if (0 == previousDirection)
+		{
+			newDirection = 2;
+		}
+		else if (1 == previousDirection)
+		{
+			newDirection = 0;
+		}
+		else if (2 == previousDirection)
+		{
+			newDirection = 3;
+		}
+		else if (3 == previousDirection)
+		{
+			newDirection = 1;
+		}
+
+		return newDirection;
+	}
+
+	void rhow(int startX, int startY, int finishX, int finishY, char* LaTeX_file, char* preambleFile)
+	{
+		int x = startX, y = startY;
+		int direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
+		cout << "S: " << x << ", " << y << ": " << maze[x][y] << "\n";
+		
+		bool isMulticolAdded = false;
+
+		copyFile(LaTeX_file, preambleFile);
+		addBeginDocument(LaTeX_file);
+
+		if (getNoOfColsForLaTeX()>= 2)
+		{
+			addBeginMulicol(LaTeX_file, getNoOfColsForLaTeX());
+			isMulticolAdded = true;
+		}
+
+		generateLaTeX(LaTeX_file, x, y, 'S');
+		generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
+		
+		while (!isRightCellWall(x, y, direction))	//Change directions until a wall is on the right hand.
+		{
+			direction = (direction + 1) % 4;	//0 = up, 1 = right, 2 = left, 3 = down
+			generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
+			cout << "Changed direction: " << getCharDirection(direction) << "\n";
+		}
+
+		while (!(x == finishX && y == finishY))
+		{
+			if (!isRightCellWall(x, y, direction))	//If right cell is not wall, change direction to right, then move to the cell.
+			{
+				Point right = getRight(x, y, direction);
+				direction = getNewRightDirection(direction);
+				generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
+				x = right.x; y = right.y;
+				generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
+			}
+			else if (!isFronCelltWall(x, y, direction))	//If right is wall but front is not, move to front.
+			{
+				Point front = getFront(x, y, direction);
+				x = front.x; y = front.y;
+				generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
+			}
+			else //If right is wall and front is wall, change direction to left.
+			{
+				direction = getNewLeftDirection(direction);
+				generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
+			}
+		}
+
+		generateLaTeX(LaTeX_file, x, y, 'F');
+		if (isMulticolAdded)
+		{
+			addEndMulicol(LaTeX_file);
+		}
+		addEndDocument(LaTeX_file);
+	}
+
 	void rma(int sX, int sY, int fX, int fY, char* LaTeX_file, char* preambleFile)
 	{
 		int x = sX, y = sY;
@@ -526,12 +825,20 @@ public:
 		cout << "S: " << x << ", " << y << ": " << maze[x][y] << "\n";
 		Point next;
 
-		copyFile(LaTeX_file, preambleFile);
-		addBeginDocument(LaTeX_file, 4);
+		bool isMulticolAdded = false;
+		copyFile(LaTeX_file, preambleFile);		
+		addBeginDocument(LaTeX_file);
+		if (getNoOfColsForLaTeX()>= 2)
+		{
+			addBeginMulicol(LaTeX_file, getNoOfColsForLaTeX());
+			isMulticolAdded = true;
+		}
 		generateLaTeX(LaTeX_file, x, y, 'S');
 
 		while (!(x == fX && y == fY))
 		{
+			//First find the next cell we will travel to if it is not an obstacle.
+			
 			char c;
 			if (0 == direction)	//Up
 			{
@@ -556,18 +863,20 @@ public:
 			
 			generateLaTeX(LaTeX_file, x, y, getCharDirection(direction));
 			
-			if (!isObstacle(next.x, next.y))
+			if (!isObstacle(next.x, next.y))	//Check if it is not an obstacle
 			{
-				x = next.x; y = next.y;
+				x = next.x; y = next.y;			//Actually move
 				cout << c << ": " << x << ", " << y << ": " << maze[x][y] << "\n";
 				
-				if (isJunction(x, y, direction))
+//				if (isJunction(x, y, direction))
+				if (isJunction(x, y))
 				{
+					cout << "Junction: (" << x << ", " << y << ")\n";
 //					cout << c << ", at junction\n";
 					direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
 				}
 			}
-			else
+			else	//If it is an obstacle, change direction. (And in the next iteration, find the next cell we will travel to if it is not an obstacle)
 			{
 //				cout << "Encountered obstacle\n";
 				direction = rand() % 4;	//0 = up, 1 = right, 2 = left, 3 = down
@@ -575,7 +884,12 @@ public:
 		}
 
 		generateLaTeX(LaTeX_file, x, y, 'F');
+		if (isMulticolAdded)
+		{
+			addEndMulicol(LaTeX_file);
+		}
 		addEndDocument(LaTeX_file);
+
 		cout << "F: " << x << ", " << y << ": " << maze[x][y] << "\n";
 	}
 
@@ -611,8 +925,9 @@ public:
 						str += "}";	//(0, 255, 255)
 //						str += "\\cellcolor[rgb]{0, 1, 1}";	//(0, 255, 255)
 					}
-					else if (0 == maze[i][j]) str += "\\texttt{}";
-					else if (1 == maze[i][j]) str += "\\cellcolor{black}";
+					// else if (0 == maze[i][j]) str += "\\texttt{} \\ ";
+					else if (0 == maze[i][j]) str += "\\";
+					else if (1 == maze[i][j]) str += "\\cellcolor{black} \\";
 					
 					if (j != noOfCols - 1) str += " & ";
 					else str += " \\\\";
@@ -680,7 +995,6 @@ public:
 	}
 };
 
-
 int main(void)
 {
 	srand(time(0));
@@ -688,17 +1002,42 @@ int main(void)
 	char preambleLaTeX[] = "preamble.txt";
 	char mazeLaTeX[] = "maze.tex";
 	char bitmapArrayFile[] = "bitmap.txt";
-	int noOfRows = 3, noOfCols = 3;
+	int noOfRowsAndCols = 3;
+	// int noOfRowsAndCols = 3;
+	int noOfRows = noOfRowsAndCols, noOfCols = noOfRowsAndCols;
 	Maze a(noOfRows, noOfCols);
 	a.generate();
 	a.print();
-	a.rma(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
-	a.printArray(bitmapArrayFile);	
-	
+	// a.rma(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
+	a.printArray(bitmapArrayFile);
+//	a.isJunction(4, 2);
+	a.rhow(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
+
+	char str[] = "pdflatex -output-directory=d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/PDF/ --max-print-line=10000 --shell-escape -synctex=1 -interaction=nonstopmode -file-line-error d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/maze.tex";
+	system(str);
+
+
+
+
+
+
+
 	//pdflatex --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, "d:/STM/GU Tech/Misc LaTeX/misc.tex"
 	//pdflatex -output-directory=d:/STM/"GU Tech"/"Misc LaTeX"/ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, d:/STM/"GU Tech"/"Misc LaTeX"/misc.tex
-	
+
 	//pdflatex -output-directory=c:\Users\"Syed Taloot"\Desktop\"STM GU Tech Laptop"\"PSPF Lab Spring 2025"\"PSPF Projects"\Maze\MazeLaTeX\ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, c:\Users\"Syed Taloot"\Desktop\"STM GU Tech Laptop"\"PSPF Lab Spring 2025"\"PSPF Projects"\Maze\"Maze Code"\maze.tex
+
+	//pdflatex -output-directory=d:/STM/"GU Tech"/"PSPF Lab Spring 2025"/"PSPF Projects"/Maze/PDF/ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, d:/STM/"GU Tech"/"PSPF Lab Spring 2025"/"PSPF Projects"/Maze/maze.tex
+
+
+//	char str[] = "pdflatex -output-directory=d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/PDF/ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/maze.tex";
+//	char str[] = "pdflatex -output-directory=d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/PDF/ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/maze.tex";
 	
+
+//	cout << "\n\n" << str << "\n\n";
+
+//	system("pdflatex -output-directory=d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/PDF/ --max-print-line=10000, --shell-escape, -synctex=1, -interaction=nonstopmode, -file-line-error, d:/STM/\"GU Tech\"/\"PSPF Lab Spring 2025\"/\"PSPF Projects\"/Maze/maze.tex");
+//	system("pause");
+
 	return 0;
 }
