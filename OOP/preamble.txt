@@ -1,0 +1,34 @@
+\documentclass[12pt]{exam} 
+\usepackage{graphicx}			% Use this package to include images
+\graphicspath{ {./Images/} }
+\usepackage{amsmath}			% A library of many standard math expressions
+\usepackage{mathtools}          % For Aboxed{} (https://tex.stackexchange.com/questions/346577/boxed-and-align)
+% \usepackage[margin=1in]{geometry}% Sets 1in margins. 
+ % \usepackage{fancyhdr}			% Creates headers and footers
+\usepackage{enumerate}          %These two packages give custom labels to a list
+\usepackage[shortlabels]{enumitem}
+\usepackage{hyperref}
+\usepackage[svgnames, table, dvipsnames]{xcolor}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{minted}
+\usemintedstyle{monokai}
+\definecolor{bg}{HTML}{282828} % from https://github.com/kevinsawicki/monokai
+\usepackage{nameref}
+\usepackage{multicol}
+\usepackage{caption}                % To use \caption*{} to show only the caption text without "Table 1: <text>"
+% \usepackage[main,largesymbols]{tccomicsans} % https://www.reddit.com/r/LaTeX/comments/1l5no5d/comment/mwm64ze/
+
+\footer{}{Page \thepage\ of \numpages}{}
+
+\hypersetup
+{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    %pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
