@@ -31,4 +31,3 @@
     %pdftitle={Overleaf Example},
     pdfpagemode=FullScreen,
 }
-
