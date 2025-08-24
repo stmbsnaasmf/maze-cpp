@@ -997,7 +997,7 @@ public:
 
 int main(void)
 {
-	srand(time(0));
+//	srand(time(0));
 	char filename[] = "table.txt";
 	char preambleLaTeX[] = "preamble.txt";
 	char mazeLaTeX[] = "maze.tex";
@@ -1008,7 +1008,7 @@ int main(void)
 	Maze a(noOfRows, noOfCols);
 	a.generate();
 	a.print();
-	// a.rma(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
+//	a.rma(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
 	a.printArray(bitmapArrayFile);
 //	a.isJunction(4, 2);
 	a.rhow(a.getNoOfRows() - 1, 0, 0, a.getNoOfCols() - 1, mazeLaTeX, preambleLaTeX);
